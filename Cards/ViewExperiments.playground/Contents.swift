@@ -15,6 +15,9 @@ class MyViewController : UIViewController {
         let greenView = getGreenView()
         let whiteView = getWhiteView()
         let pinkView = getPinkView()
+        
+        // поворот красного представления
+        redView.transform = CGAffineTransform(rotationAngle: .pi/4)
 
 
         self.view.addSubview(redView)
@@ -52,13 +55,15 @@ class MyViewController : UIViewController {
     }
     
     private func set(view moveView: UIView, toCenterOfView baseView: UIView){
+        moveView.center = CGPoint(x: baseView.bounds.midX, y: baseView.bounds.midY)
+        
         // размеры вложенного представления
         let moveViewWidth = moveView.frame.width
         let moveViewHeight = moveView.frame.height
         
         // размеры родительского представления
-        let baseViewWidth = baseView.frame.width
-        let baseViewHeight = baseView.frame.height
+        let baseViewWidth = baseView.bounds.width
+        let baseViewHeight = baseView.bounds.height
         
         // вычисление и изменение координат
         let nextXCoordinate = (baseViewWidth - moveViewWidth) / 2
@@ -109,8 +114,8 @@ class MyViewController : UIViewController {
         // растяжение/сжатие розового представления.
 //        view.transform = CGAffineTransform(scaleX: 1.5, y: 0.7)
         
-        // перемещение обьекта 
-        view.transform = CGAffineTransform(translationX: 100, y: 5)
+        // перемещение обьекта
+//        view.transform = CGAffineTransform(translationX: 100, y: 5)
         
         return view
     }

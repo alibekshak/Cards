@@ -25,6 +25,7 @@
 		187C88972AAADBA5003BD1AB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		187C88992AAADBA5003BD1AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		187C889F2AAADBF2003BD1AB /* ViewExperiments.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = ViewExperiments.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		187C88A02AAF2BA2003BD1AB /* BezierExperiments.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = BezierExperiments.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +66,7 @@
 				187C88962AAADBA5003BD1AB /* LaunchScreen.storyboard */,
 				187C88992AAADBA5003BD1AB /* Info.plist */,
 				187C889F2AAADBF2003BD1AB /* ViewExperiments.playground */,
+				187C88A02AAF2BA2003BD1AB /* BezierExperiments.playground */,
 			);
 			path = Cards;
 			sourceTree = "<group>";
