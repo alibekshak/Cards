@@ -18,6 +18,46 @@ class BoardGameController: UIViewController {
     // игровое поле
     lazy var boardGameView = getBoardGameView()
     
+    private var cardSize: CGSize{
+        CGSize(width: 80, height: 120)
+    }
+    
+    // предельные координаты размещения карточки
+    private var cardMaxXCoordinate: Int{
+        nt(boardGameView.frame.width - cardSize.width)
+    }
+    private var cardMaxYCoordinate: Int{
+        Int(boardGameView.frame.height - cardSize.height)
+    }
+    
+    
+    private func getCardsBy(modelData: [Card]) -> [UIView]{
+        // хранилище для представлений карточек
+        var cardView = [UIView]()
+        // фабрика карточек
+        let cardViewFactory = CardViewFactory()
+        // перебираем массив карточек в Модели
+        for (index, modelCard) in modelData.enumerated(){
+            // добавляем первый экземпляр карты
+            let cardOne = cardViewFactory.get(modelCard.type, withSize: cardSize, andColor: modelCard.color)
+            cardOne.tag = index
+            cardView.append(cardOne)
+            
+            // добавляем второй экземпляр карты
+            let cardTwo = cardViewFactory.get(modelCard.type, withSize: cardSize, andColor: modelCard.color)
+            cardTwo.tag = index
+            cardView.append(cardTwo)
+        }
+        // добавляем всем картам обработчик переворота
+        for card in cardView{
+            (card as! FlippableView).flipCompletionHandler = { flippedCard in
+                // переносим карточку вверх иерархии
+                flippedCard.superview?.bringSubviewToFront(flippedCard)
+            }
+        }
+        return cardView
+    }
+    
     private func getBoardGameView() -> UIView{
         // отступ игрового поля от ближайших элементов
         let margin: CGFloat = 10
