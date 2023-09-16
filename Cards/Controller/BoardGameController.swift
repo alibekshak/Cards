@@ -18,22 +18,44 @@ class BoardGameController: UIViewController {
     // игровое поле
     lazy var boardGameView = getBoardGameView()
     
-    private var cardSize: CGSize{
-        CGSize(width: 80, height: 120)
-    }
+    // размеры карточек
+    private var cardSize = CGSize(width: 80, height: 120)
     
     // предельные координаты размещения карточки
     private var cardMaxXCoordinate: Int{
-        nt(boardGameView.frame.width - cardSize.width)
+        Int(boardGameView.frame.width - cardSize.width)
     }
     private var cardMaxYCoordinate: Int{
         Int(boardGameView.frame.height - cardSize.height)
     }
     
+    // игральные карточки
+    var cardViews = [UIView]()
+    
+    private var flippedCards = [UIView]()
+    
+    
+    private func placeCardsOnBoard(_ cards: [UIView]){
+        // удаляем все имеющиеся на игровом поле карточки
+        for card in cardViews{
+            card.removeFromSuperview()
+        }
+        cardViews = cards
+        // перебираем карточки
+        for card in cardViews{
+            // для каждой карточки генерируем случайные координаты
+            let randomXCoordinate = Int.random(in: 0...cardMaxXCoordinate)
+            let randomYCoordinate = Int.random(in: 0...cardMaxYCoordinate)
+            card.frame.origin = CGPoint(x: randomXCoordinate, y: randomYCoordinate)
+            // размещаем карточку на игровом поле
+            boardGameView.addSubview(card)
+        }
+    }
+    
     
     private func getCardsBy(modelData: [Card]) -> [UIView]{
         // хранилище для представлений карточек
-        var cardView = [UIView]()
+        var cardViews = [UIView]()
         // фабрика карточек
         let cardViewFactory = CardViewFactory()
         // перебираем массив карточек в Модели
@@ -41,21 +63,57 @@ class BoardGameController: UIViewController {
             // добавляем первый экземпляр карты
             let cardOne = cardViewFactory.get(modelCard.type, withSize: cardSize, andColor: modelCard.color)
             cardOne.tag = index
-            cardView.append(cardOne)
+            cardViews.append(cardOne)
             
             // добавляем второй экземпляр карты
             let cardTwo = cardViewFactory.get(modelCard.type, withSize: cardSize, andColor: modelCard.color)
             cardTwo.tag = index
-            cardView.append(cardTwo)
+            cardViews.append(cardTwo)
         }
         // добавляем всем картам обработчик переворота
-        for card in cardView{
-            (card as! FlippableView).flipCompletionHandler = { flippedCard in
+        for card in cardViews{
+            (card as! FlippableView).flipCompletionHandler = { [self] flippedCard in
                 // переносим карточку вверх иерархии
                 flippedCard.superview?.bringSubviewToFront(flippedCard)
+                
+                // добавляем или удаляем карточку
+                if flippedCard.isFlipped {
+                    self.flippedCards.append(flippedCard)
+                }else{
+                    if let cardIndex = self.flippedCards.firstIndex(of: flippedCard){
+                        self.flippedCards.remove(at: cardIndex)
+                    }
+                }
+                // если перевернуто 2 карточки
+                if self.flippedCards.count == 2{
+                    // получаем карточки из данных модели
+                    let firstCard = game.cards[self.flippedCards.first!.tag]
+                    let secondCard = game.cards[self.flippedCards.last!.tag]
+                    
+                    // если карточки одинаковые
+                    if game.checkCards(firstCard, secondCard){
+                        // сперва анимировано скрываем их
+                        UIView.animate(withDuration: 0.3, animations: {
+                            self.flippedCards.first!.layer.opacity = 0
+                            self.flippedCards.last!.layer.opacity = 0
+                            // после чего удаляем из иерархии
+                        }, completion: { _ in
+                            self.flippedCards.first!.removeFromSuperview()
+                            self.flippedCards.last!.removeFromSuperview()
+                            self.flippedCards = []
+                        })
+                        // в ином случае
+                    }else{
+                        // переворачиваем карточки рубашкой вверх
+                        for card in self.flippedCards{
+                            (card as! FlippableView).flip()
+                        }
+                    }
+                }
             }
         }
-        return cardView
+        
+        return cardViews
     }
     
     private func getBoardGameView() -> UIView{
@@ -72,7 +130,7 @@ class BoardGameController: UIViewController {
         boardView.frame.origin.y = topPadding + startButtonView.frame.height + margin
         
         // рассчитываем ширину
-        boardView.frame.size.width = UIScreen.main.bounds.width - margin*2
+        boardView.frame.size.width = UIScreen.main.bounds.width - margin * 2
         // рассчитываем высоту c учетом нижнего отступа
         let bottomPadding = window.safeAreaInsets.bottom
         boardView.frame.size.height = UIScreen.main.bounds.height - boardView.frame.origin.y - margin - bottomPadding
@@ -80,12 +138,17 @@ class BoardGameController: UIViewController {
         // изменяем стиль игрового поля
         boardView.layer.cornerRadius = 5
         boardView.backgroundColor = UIColor(red: 0.1, green: 0.9, blue: 0.1, alpha: 0.3)
+        
         return boardView
     }
     
+    
     @objc func startGame(_ sender: UIButton){
-        print("button was pressed")
+        game = getNewGame()
+        let cards = getCardsBy(modelData: game.cards)
+        placeCardsOnBoard(cards)
     }
+    
     
     private func getStartButtonView() -> UIButton{
         // Создаем кнопку

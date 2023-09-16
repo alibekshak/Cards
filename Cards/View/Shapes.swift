@@ -29,6 +29,7 @@ class CircleShape: CAShapeLayer, ShapeLayerProtocol{
         // изменяем цвет
         self.fillColor = fillColor
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -85,6 +86,7 @@ class FillShape: CAShapeLayer, ShapeLayerProtocol {
         self.path = path.cgPath
         self.fillColor = fillColor
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -118,6 +120,7 @@ class BackSideCircle: CAShapeLayer, ShapeLayerProtocol {
         self.fillColor = fillColor
         self.lineWidth = 1
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

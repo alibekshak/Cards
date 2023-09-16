@@ -50,7 +50,6 @@
 		187C887F2AAADBA2003BD1AB = {
 			isa = PBXGroup;
 			children = (
-				187C88B02AB2CB8B003BD1AB /* Helper */,
 				187C888A2AAADBA2003BD1AB /* Cards */,
 				187C88892AAADBA2003BD1AB /* Products */,
 			);
@@ -67,11 +66,10 @@
 		187C888A2AAADBA2003BD1AB /* Cards */ = {
 			isa = PBXGroup;
 			children = (
+				187C88B02AB2CB8B003BD1AB /* Helper */,
 				187C88AB2AB1B352003BD1AB /* Model */,
 				187C88A82AB1B2C2003BD1AB /* Controller */,
 				187C88A22AB1B0D8003BD1AB /* View */,
-				187C888B2AAADBA2003BD1AB /* AppDelegate.swift */,
-				187C888D2AAADBA2003BD1AB /* SceneDelegate.swift */,
 				187C88942AAADBA5003BD1AB /* Assets.xcassets */,
 				187C88992AAADBA5003BD1AB /* Info.plist */,
 			);
@@ -101,6 +99,8 @@
 			isa = PBXGroup;
 			children = (
 				187C88A92AB1B300003BD1AB /* BoardGameController.swift */,
+				187C888B2AAADBA2003BD1AB /* AppDelegate.swift */,
+				187C888D2AAADBA2003BD1AB /* SceneDelegate.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
